@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPS Camera - Free Geo Tag Camera</title>
+<style>
+body{font-family:sans-serif; text-align:center; background:#000; color:#fff; margin:0; padding:10px}
+video{width:100%; border-radius:12px; background:#222}
+button{background:#2196F3; color:#fff; padding:12px 25px; border:none; border-radius:25px; font-size:18px; margin:10px}
+#info{background:#fff; color:#000; padding:12px; margin:10px 0; text-align:left; border-radius:10px}
+#box{background:#111; padding:10px; border-radius:10px}
+</style>
+</head>
+<body>
+<h2>📸 GPS Camera - Free Tool</h2>
+<p>Photo par Location, Date aur Time lagao</p>
+<video id="video" autoplay playsinline></video>
+<div id="info">Location loading... Thora wait karein...</div>
+<button onclick="takePhoto()">📷 Photo Lo</button>
+<div id="box"><p>Neeche aapki photo aayegi, phir Download dabayein</p></div>
+<canvas id="canvas" style="display:none"></canvas>
+<a id="download" style="display:none" download="gps-photo.jpg"><button>⬇️ Download Karo</button></a>
+<script>
+let lat="---", lon="---";
+if(navigator.geolocation){
+navigator.geolocation.getCurrentPosition(p=>{
+ lat=p.coords.latitude.toFixed(6);
+ lon=p.coords.longitude.toFixed(6);
+ document.getElementById('info').innerHTML = "Lat: "+lat+"<br>Long: "+lon+"<br>Date: "+new Date().toLocaleString()+"<br>Location: Pakistan";
+});
+}
+navigator.mediaDevices.getUserMedia({video:true}).then(s=>{
+ document.getElementById('video').srcObject=s;
+});
+function takePhoto(){
+ let v=document.getElementById('video');
+ let c=document.getElementById('canvas');
+ c.width=v.videoWidth; c.height=v.videoHeight;
+ let ctx=c.getContext('2d');
+ ctx.drawImage(v,0,0);
+ ctx.fillStyle="rgba(0,0,0,0.75)"; ctx.fillRect(0,c.height-120,c.width,120);
+ ctx.fillStyle="#fff"; ctx.font="bold 20px Arial";
+ ctx.fillText("GPS Camera - "+new Date().toLocaleString(),10,c.height-90);
+ ctx.fillText("Lat "+lat+"  Long "+lon,10,c.height-60);
+ ctx.fillText("Pakistan - Free GPS Camera Tool",10,c.height-30);
+ let link=document.getElementById('download');
+ link.href=c.toDataURL('image/jpeg');
+ link.style.display="block";
+ document.getElementById('box').innerHTML="<b style='color:lightgreen'>Photo ban gaya! Neeche Download dabayein</b>";
+}
+</script>
+</body>
+</html>
