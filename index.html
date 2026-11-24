@@ -1,6 +1,17 @@
-<!DOCTYPE html>
+<!DOCTYPE html>let map = L.map('map').setView([31.5497, 74.3436], 15);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+let marker = L.marker([31.5497, 74.3436]).addTo(map);
+
+// جب Location ملے تو Map بھی بدل جائے
+navigator.geolocation.watchPosition((pos) => {
+  let lat = pos.coords.latitude;
+  let lon = pos.coords.longitude;
+  map.setView([lat, lon], 16);
+  marker.setLatLng([lat, lon]);
+});
 <html>
-<head>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GPS Camera - Free Tool</title>
 <style>
@@ -77,4 +88,4 @@ function takePhoto(){
 startCamera();
 </script>
 </body>
-</html>
+</html><div id="map" style="width:100%; height:220px; border-radius:12px; margin-top:10px;"></div>
